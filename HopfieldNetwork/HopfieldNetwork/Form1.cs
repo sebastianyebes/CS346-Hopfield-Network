@@ -186,7 +186,7 @@ namespace HopfieldNetwork
             }
             else
             {
-                textBox2.Text = "Disrepancy occured";
+                textBox2.Text = "Discrepancy occured";
                 reset();
             }
         }
