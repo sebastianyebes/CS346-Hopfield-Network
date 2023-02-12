@@ -53,6 +53,7 @@ namespace HopfieldNetwork
             pictureBox17.BackColor = Color.White;
             pictureBox18.BackColor = Color.White;
             pictureBox19.BackColor = Color.White;
+            inputVector = Enumerable.Range(0, 9).Select(y => -1).ToArray();
         }
 
         public Color boxAssign(int num)
