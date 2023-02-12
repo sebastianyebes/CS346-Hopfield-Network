@@ -1,14 +1,12 @@
 using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Single;
-using System.Formats.Asn1;
 
 namespace HopfieldNetwork
 {
     public partial class Form1 : Form
     {
-
-        private Matrix<float> inputMatrix;
-        private Matrix<float> outputMatrix;
+        int[] inputVector = {-1, -1, -1, -1, -1, -1,-1 ,-1 ,-1};
+        int[] outputVector = new int[9];
+        int[] value = new int[9];
 
         private Matrix<float> weight = Matrix<float>.Build.DenseOfArray(new float[,]
             {
@@ -18,25 +16,20 @@ namespace HopfieldNetwork
                 { 2, 0, -2, 0, 2, 2, -2, 0 ,-2 },
                 { 2, 0, -2, 2, 0, 2, -2, 0, -2 },
                 { 2, 0, -2, 2, 2, 0, -2, 0, -2 },
-                { 2, 0, 2, -2, -2, -2, 0, 0, -2},
+                { 2, 0, 2, -2, -2, -2, 0, 0, 2},
                 { 0, 2, 0, 0, 0, 0, 0, 0, 0},
                 { 2, 0, 2, -2, -2, -2, 2, 0, 0 }
             });
 
-        private int Rules(float num)
-        {
-            if (num > 0) return 1;
-            return -1;
-        }
-
         public Form1()
         {
             InitializeComponent();
-            inputMatrix = Matrix<float>.Build.Dense(9, 1, -1);
-            outputMatrix = Matrix<float>.Build.Dense(9, 1, -1);
+            button1.Enabled = false;
         }
+
         public int boxClick(PictureBox pb) 
         {
+            button1.Enabled = true;
             if(pb.BackColor == Color.Black)
             {
                 pb.BackColor = Color.White;
@@ -49,9 +42,22 @@ namespace HopfieldNetwork
             }
         }
 
-        public Color boxAssign(float num)
+        public void reset()
         {
-            if ((int)num >= 1)
+            pictureBox11.BackColor= Color.White;
+            pictureBox12.BackColor = Color.White;
+            pictureBox13.BackColor = Color.White;
+            pictureBox14.BackColor = Color.White;
+            pictureBox15.BackColor = Color.White;
+            pictureBox16.BackColor = Color.White;
+            pictureBox17.BackColor = Color.White;
+            pictureBox18.BackColor = Color.White;
+            pictureBox19.BackColor = Color.White;
+        }
+
+        public Color boxAssign(int num)
+        {
+            if (num >= 1)
             {
                 return Color.Black;
             }
@@ -60,63 +66,128 @@ namespace HopfieldNetwork
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            inputMatrix[0,0] = boxClick(pictureBox1);
+            inputVector[0] = boxClick(pictureBox1);
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-            inputMatrix[1, 0] = boxClick(pictureBox2);
+            inputVector[1] = boxClick(pictureBox2);
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
         {
-            inputMatrix[2, 0] =  boxClick(pictureBox3);
+            inputVector[2] =  boxClick(pictureBox3);
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
         {
-            inputMatrix[3, 0] = boxClick(pictureBox4);
+            inputVector[3] = boxClick(pictureBox4);
         }
 
         private void pictureBox5_Click(object sender, EventArgs e)
         {
-            inputMatrix[4, 0] = boxClick(pictureBox5);
+            inputVector[4] = boxClick(pictureBox5);
         }
 
         private void pictureBox6_Click(object sender, EventArgs e)
         {
-            inputMatrix[5, 0] = boxClick(pictureBox6);
+            inputVector[5] = boxClick(pictureBox6);
         }
 
         private void pictureBox7_Click(object sender, EventArgs e)
         {
-            inputMatrix[6, 0] = boxClick(pictureBox7);
+            inputVector[6] = boxClick(pictureBox7);
         }
 
         private void pictureBox8_Click(object sender, EventArgs e)
         {
-            inputMatrix[7, 0] = boxClick(pictureBox8);
+            inputVector[7] = boxClick(pictureBox8);
         }
 
         private void pictureBox9_Click(object sender, EventArgs e)
         {
-            inputMatrix[8, 0] = boxClick(pictureBox9);
+            inputVector[8] = boxClick(pictureBox9);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            outputMatrix = weight.Multiply(inputMatrix);
-            textBox1.Text = outputMatrix.ToString();
-            textBox2.Text = inputMatrix.ToString();
-            pictureBox11.BackColor = boxAssign(outputMatrix[0, 0]);
-            pictureBox12.BackColor = boxAssign(outputMatrix[1, 0]);
-            pictureBox13.BackColor = boxAssign(outputMatrix[2, 0]);
-            pictureBox14.BackColor = boxAssign(outputMatrix[3, 0]);
-            pictureBox15.BackColor = boxAssign(outputMatrix[4, 0]);
-            pictureBox16.BackColor = boxAssign(outputMatrix[5, 0]);
-            pictureBox17.BackColor = boxAssign(outputMatrix[6, 0]);
-            pictureBox18.BackColor = boxAssign(outputMatrix[7, 0]);
-            pictureBox19.BackColor = boxAssign(outputMatrix[8, 0]);
+            int[] plus = { -1, 1, -1, 1, 1, 1, -1, 1, -1 };
+            int[] minus = { -1, -1, -1, 1, 1, 1, -1, -1, -1 };
+            int recurred = 0;
+            int temp;
+            int sum;
+
+            string inputVect = string.Empty;
+            string outputVect = string.Empty;
+            string valueText = string.Empty;
+            outputVector = inputVector;
+
+            button1.Enabled = false;
+
+            foreach (var n in inputVector)
+            {
+                inputVect += n + ", ";
+            }
+            
+            textBox1.Text = inputVect;
+
+            while (recurred < 2)
+            {
+                for (int i = 0; i < inputVector.Length; i++)
+                {
+                    inputVector = outputVector;
+                    sum = 0;
+
+                    for (int j = 0; j < inputVector.Length; j++)
+                    {
+                        temp = (int)weight[i, j] * inputVector[j];
+                        sum += temp;
+                    }
+
+                    value[i] = sum;
+
+                    if (sum >= 1)
+                    {
+                        outputVector[i] = 1;
+                    }
+                    else
+                    {
+                        outputVector[i] = -1;
+                    }
+                }
+                recurred++;
+            }
+
+            foreach (var n in value)
+            {
+                valueText += n + ", ";
+            }
+            textBox3.Text = valueText;
+
+            if (Enumerable.SequenceEqual(outputVector, plus)  || Enumerable.SequenceEqual(outputVector, minus))
+            {
+                foreach (var n in outputVector)
+                {
+                    outputVect += n + ", ";
+                }
+
+                textBox2.Text = outputVect;
+
+                pictureBox11.BackColor = boxAssign(outputVector[0]);
+                pictureBox12.BackColor = boxAssign(outputVector[1]);
+                pictureBox13.BackColor = boxAssign(outputVector[2]);
+                pictureBox14.BackColor = boxAssign(outputVector[3]);
+                pictureBox15.BackColor = boxAssign(outputVector[4]);
+                pictureBox16.BackColor = boxAssign(outputVector[5]);
+                pictureBox17.BackColor = boxAssign(outputVector[6]);
+                pictureBox18.BackColor = boxAssign(outputVector[7]);
+                pictureBox19.BackColor = boxAssign(outputVector[8]);
+            }
+            else
+            {
+                textBox2.Text = "Disrepancy occured";
+                reset();
+            }
         }
     }
 }
