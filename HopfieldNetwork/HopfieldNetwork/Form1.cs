@@ -25,6 +25,7 @@ namespace HopfieldNetwork
         {
             InitializeComponent();
             button1.Enabled = false;
+            button2.Enabled = false;
         }
 
         public int boxClick(PictureBox pb) 
@@ -124,6 +125,7 @@ namespace HopfieldNetwork
             outputVector = inputVector;
 
             button1.Enabled = false;
+            button2.Enabled = true;
 
             foreach (var n in inputVector)
             {
@@ -189,6 +191,43 @@ namespace HopfieldNetwork
                 textBox2.Text = "Discrepancy occured";
                 reset();
             }
+            pictureBox1.Enabled = false;
+            pictureBox2.Enabled = false;
+            pictureBox3.Enabled = false;
+            pictureBox4.Enabled = false;
+            pictureBox5.Enabled = false;
+            pictureBox6.Enabled = false;
+            pictureBox7.Enabled = false;
+            pictureBox8.Enabled = false;
+            pictureBox9.Enabled = false;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            reset();
+            textBox1.Text = string.Empty;
+            textBox2.Text = string.Empty;
+            textBox3.Text = string.Empty;
+            pictureBox1.BackColor = Color.White;
+            pictureBox2.BackColor = Color.White;
+            pictureBox3.BackColor = Color.White;
+            pictureBox4.BackColor = Color.White;
+            pictureBox5.BackColor = Color.White;
+            pictureBox6.BackColor = Color.White;
+            pictureBox7.BackColor = Color.White;
+            pictureBox8.BackColor = Color.White;
+            pictureBox9.BackColor = Color.White;
+            pictureBox1.Enabled = true;
+            pictureBox2.Enabled = true;
+            pictureBox3.Enabled = true;
+            pictureBox4.Enabled = true;
+            pictureBox5.Enabled = true;
+            pictureBox6.Enabled = true;
+            pictureBox7.Enabled = true;
+            pictureBox8.Enabled = true;
+            pictureBox9.Enabled = true;
+            button1.Enabled = false;
+            button2.Enabled = false;
         }
     }
 }
