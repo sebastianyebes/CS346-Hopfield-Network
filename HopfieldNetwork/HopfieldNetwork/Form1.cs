@@ -1,9 +1,14 @@
 using MathNet.Numerics.LinearAlgebra;
 
 namespace HopfieldNetwork
-{
+{   
+    /// <summary>
+    /// This is a Machine Learning Algorithm that 
+    /// uses Hopfield Network
+    /// </summary>
     public partial class Form1 : Form
-    {
+    {   
+        
         int[] inputVector = {-1, -1, -1, -1, -1, -1,-1 ,-1 ,-1};
         int[] outputVector = new int[9];
         int[] value = new int[9];
@@ -43,6 +48,9 @@ namespace HopfieldNetwork
             }
         }
 
+        /// <summary>
+        /// Resets the input matrix
+        /// </summary>
         public void reset()
         {
             pictureBox11.BackColor= Color.White;
@@ -57,6 +65,13 @@ namespace HopfieldNetwork
             inputVector = Enumerable.Range(0, 9).Select(y => -1).ToArray();
         }
 
+        /// <summary>
+        /// Assigns color based on numeric values where:
+        ///      1 >= black
+        ///     -1 <= white
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns> color</returns>
         public Color boxAssign(int num)
         {
             if (num >= 1)
@@ -111,8 +126,13 @@ namespace HopfieldNetwork
             inputVector[8] = boxClick(pictureBox9);
         }
 
+        /// <summary>
+        /// This is a solve button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
-        {
+        {   
             int[] plus = { -1, 1, -1, 1, 1, 1, -1, 1, -1 };
             int[] minus = { -1, -1, -1, 1, 1, 1, -1, -1, -1 };
             int recurred = 0;
@@ -127,6 +147,7 @@ namespace HopfieldNetwork
             button1.Enabled = false;
             button2.Enabled = true;
 
+            // this converts array to string
             foreach (var n in inputVector)
             {
                 inputVect += n + ", ";
@@ -134,6 +155,8 @@ namespace HopfieldNetwork
             
             textBox1.Text = inputVect;
 
+            // this algorithm multiplies the input vector to the weight vector
+            // in a recurring manner
             while (recurred < 2)
             {
                 for (int i = 0; i < inputVector.Length; i++)
@@ -160,13 +183,16 @@ namespace HopfieldNetwork
                 }
                 recurred++;
             }
-
+            
+            // converts value array to string
             foreach (var n in value)
             {
                 valueText += n + ", ";
             }
             textBox3.Text = valueText;
 
+            // checks if the output vector corresponds to the learned
+            // patterns, "+" or "-"
             if (Enumerable.SequenceEqual(outputVector, plus)  || Enumerable.SequenceEqual(outputVector, minus))
             {
                 foreach (var n in outputVector)
@@ -202,6 +228,11 @@ namespace HopfieldNetwork
             pictureBox9.Enabled = false;
         }
 
+        /// <summary>
+        /// Resets the Form or Program
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
             reset();
